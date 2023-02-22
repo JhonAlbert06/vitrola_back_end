@@ -1,8 +1,22 @@
 #[macro_use] extern crate rocket;
 
+mod songs;
+use songs::Songs;
+use rocket::serde::json::Json;
+
+
+
 #[get("/Songs")]
-fn get_songs() -> &'static str {
-    "Get Songs!"
+fn get_songs() -> Json<Songs> {
+
+    let song = Songs {
+        name: "Acompáñame a Estar Solo".to_string(),
+        genre: "Balada".to_string(),
+        length: "4:43".to_string(),
+        artist: "Ricardo Arjona".to_string()
+    };
+
+    Json(song);
 }
 
 #[post("/Songs")]
