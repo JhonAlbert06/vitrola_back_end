@@ -1,44 +1,41 @@
 #[macro_use] extern crate rocket;
 
-mod songs;
-use songs::Songs;
+mod song;
+use song::Song;
 
 use rocket::serde::json::Json;
 
-
-/* const SONGS: &[Songs] = &[
-    Songs {
-        name: "Acompáñame a Estar Solo".to_string(),
-        genre: "Balada".to_owned(),
-        length: "4:43".to_string(),
-        artist: "Ricardo Arjona".to_owned()
-    },
-    Songs {
-        name: "Bohemian Rhapsody".to_owned(),
-        genre: "Rock".to_string(),
-        length: "4:43".to_owned(),
-        artist: "Queen".to_string()
-    },
-]; */
-
 #[get("/Songs")]
-fn get_songs() -> Json<Vec<Songs>> {
-    let SONGS: &[Songs] = &[
-        Songs {
+fn get_songs() -> Json<Vec<Song>> {
+    
+    let songs: &[Song] = &[
+        Song {
             name: "Acompáñame a Estar Solo".to_string(),
             genre: "Balada".to_owned(),
             length: "4:43".to_string(),
             artist: "Ricardo Arjona".to_owned()
         },
-        Songs {
+        Song {
             name: "Bohemian Rhapsody".to_owned(),
-            genre: "Rock".to_string(),
-            length: "4:43".to_owned(),
-            artist: "Queen".to_string()
+            genre: "Rock".to_owned(),
+            length: "6:10".to_owned(),
+            artist: "Queen".to_owned(),
         },
+        Song {
+            name: "Billie Jean".to_owned(),
+            genre: "Pop".to_owned(),
+            length: "4:09".to_owned(),
+            artist: "Michael Jackson".to_owned(),
+        },
+        Song {
+            name: "Stairway to Heaven".to_owned(),
+            genre: "Rock".to_owned(),
+            length: "8:03".to_owned(),
+            artist: "Led Zeppelin".to_owned(),
+        }
     ];
     
-    Json(SONGS.to_vec())
+    Json(songs.to_vec())
 }
 
 #[post("/Songs")]
