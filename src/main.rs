@@ -2,21 +2,43 @@
 
 mod songs;
 use songs::Songs;
+
 use rocket::serde::json::Json;
 
 
+/* const SONGS: &[Songs] = &[
+    Songs {
+        name: "Acompáñame a Estar Solo".to_string(),
+        genre: "Balada".to_owned(),
+        length: "4:43".to_string(),
+        artist: "Ricardo Arjona".to_owned()
+    },
+    Songs {
+        name: "Bohemian Rhapsody".to_owned(),
+        genre: "Rock".to_string(),
+        length: "4:43".to_owned(),
+        artist: "Queen".to_string()
+    },
+]; */
 
 #[get("/Songs")]
-fn get_songs() -> Json<Songs> {
-
-    let song = Songs {
-        name: "Acompáñame a Estar Solo".to_string(),
-        genre: "Balada".to_string(),
-        length: "4:43".to_string(),
-        artist: "Ricardo Arjona".to_string()
-    };
-
-    Json(song);
+fn get_songs() -> Json<Vec<Songs>> {
+    let SONGS: &[Songs] = &[
+        Songs {
+            name: "Acompáñame a Estar Solo".to_string(),
+            genre: "Balada".to_owned(),
+            length: "4:43".to_string(),
+            artist: "Ricardo Arjona".to_owned()
+        },
+        Songs {
+            name: "Bohemian Rhapsody".to_owned(),
+            genre: "Rock".to_string(),
+            length: "4:43".to_owned(),
+            artist: "Queen".to_string()
+        },
+    ];
+    
+    Json(SONGS.to_vec())
 }
 
 #[post("/Songs")]
