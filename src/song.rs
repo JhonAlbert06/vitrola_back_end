@@ -1,7 +1,9 @@
-use bson::{oid::ObjectId, doc, Bson};
+use bson::{oid::ObjectId, Bson, doc};
 use serde::{Serialize, Deserialize};
 
 use crate::mongo_db::MongoDb;
+
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Song {
@@ -40,7 +42,8 @@ impl Song {
         if result.modified_count == 0 {
             None
         } else {
-            Self::find_by_id(db, &song.id.unwrap()).await
+
+            Self::find_by_id(db, song.id.unwrap()).await
         }
     }
 
