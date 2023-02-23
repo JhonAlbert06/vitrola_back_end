@@ -1,16 +1,38 @@
-use bson::doc;
-use mongodb::{Client, options::{ClientOptions, ResolverConfig}};
-use std::env;
-use std::error::Error;
-use tokio;
+use mongodb::{Client, options::ClientOptions, bson::{doc, oid::ObjectId}, Collection};
+use serde::{Serialize, Deserialize};
 
-use crate::song::Song;
 
-#[tokio::main]
-pub async fn connect_db() -> Result<(), Box<dyn Error>> {
+mod song;
+use song::Song;
 
-    Ok(())
+pub struct MongoDb {
+    client: Client,
+    db_name: String,
+    coll_name: String,
 }
+
+impl MongoDb {
+
+    pub async fn new() -> Self {
+        let client_options = ClientOptions::parse("mongodb://localhost:27017").await.unwrap();
+        let client = Client::with_options(client_options).unwrap();
+
+        MongoDb {
+            client,
+            db_name: "songs_db".to_string(),
+            coll_name: "songs".to_string(),
+        }
+    }
+
+    pub fn collection(&self) -> Collection<Song> {
+        self.client.database(&self.db_name).collection(&self.coll_name)
+    }
+
+    pub async fn disconnect(&self) {
+        //self.client.shutdown().await.unwrap();
+    }
+}
+
 
 
 
