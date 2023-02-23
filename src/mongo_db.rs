@@ -1,9 +1,6 @@
-use mongodb::{Client, options::ClientOptions, bson::{doc, oid::ObjectId}, Collection};
-use serde::{Serialize, Deserialize};
+use mongodb::{Client, options::ClientOptions, Collection};
 
-
-mod song;
-use song::Song;
+use crate::song::Song;
 
 pub struct MongoDb {
     client: Client,
