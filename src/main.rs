@@ -40,7 +40,8 @@ async fn get_songs() -> &'static str {
         length: "3:36".to_string(),
         artist: "Queen".to_string(),
     };
-    let song = Song::update(&db, updated_song).await.unwrap();
+    
+    let song = Song::update(&db, &updated_song).await.unwrap();
     println!("Updated Song: {:?}", song);
 
     // Delete a Song
