@@ -5,10 +5,7 @@ use song::Song;
 
 use rocket::serde::json::Json;
 
-#[get("/Songs")]
-fn get_songs() -> Json<Vec<Song>> {
-    
-    let songs: &[Song] = &[
+/* let songss: &[Song] = &[
         Song {
             name: "Bohemian Rhapsody".to_owned(),
             genre: "Rock".to_owned(),
@@ -69,8 +66,23 @@ fn get_songs() -> Json<Vec<Song>> {
             length: "6:28".to_owned(),
             artist: "Metallica".to_owned(),
         },
-    ];
+    ]; 
+*/
+
+#[get("/Songs")]
+fn get_songs() -> Json<Vec<Song>> {
+
+    let mut songs: Vec<Song> = Vec::new();
     
+    let aux = Song {
+        name: "Bohemian Rhapsody".to_owned(),
+        genre: "Rock".to_owned(),
+        length: "5:55".to_owned(),
+        artist: "Queen".to_owned(),
+    };
+
+    songs.push(aux);
+
     Json(songs.to_vec())
 }
 
