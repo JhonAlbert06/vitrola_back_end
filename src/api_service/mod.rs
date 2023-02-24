@@ -10,7 +10,7 @@ extern crate serde_json;
 // Estructure data for DB
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Data {
-    name: String,
+    pub name: String,
     genre: String,
     length: String,
     artist: String,
