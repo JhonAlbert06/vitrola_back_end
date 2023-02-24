@@ -38,7 +38,7 @@ async fn main() -> std::io::Result<()> {
 
     // Parse a connection string into an options struct.
     let database_url = env::var("DATABASE_URL").expect("DATABASE URL is not in .env file");
-    let client_options = ClientOptions::parse(&database_url).await.unwrap();
+    let client_options = ClientOptions::parse(&database_url).unwrap();
 
     // Get the reference to Mongo DB
     let client = Client::with_options(client_options).unwrap();
