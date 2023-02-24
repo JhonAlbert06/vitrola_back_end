@@ -1,9 +1,9 @@
 use crate::api_service::Data;
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
 
-#[get("/get-all")]
+#[get("/Songs")]
 async fn get_all_songs(app_data: web::Data<crate::AppState>) -> impl Responder {
-    let action = app_data.service_manager.api.get_json();
+    let action = app_data.service_manager.api.get_all_songs();
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result),
@@ -14,9 +14,9 @@ async fn get_all_songs(app_data: web::Data<crate::AppState>) -> impl Responder {
     }
 }
 
-#[get("/get-by/{param}")]
+#[get("/Songs/{param}")]
 async fn get_song_by(app_data: web::Data<crate::AppState>, param: web::Path<String>) -> impl Responder {
-    let action = app_data.service_manager.api.get_by(&param);
+    let action = app_data.service_manager.api.get_by_song(&param);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result),
@@ -27,9 +27,9 @@ async fn get_song_by(app_data: web::Data<crate::AppState>, param: web::Path<Stri
     }
 }
 
-#[post("/add")]
+#[post("/Songs")]
 async fn add_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager.api.create(&data);
+    let action = app_data.service_manager.api.create_song(&data);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.inserted_id),
@@ -40,7 +40,7 @@ async fn add_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -
     }
 }
 
-#[post("/update/{param}")]
+#[post("/Songs/{param}")]
 async fn update_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>, param: web::Path<String>) -> impl Responder {
     let action = app_data.service_manager.api.update_song(&data, &param);
     let result = web::block(move || action).await;
@@ -53,7 +53,7 @@ async fn update_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>
     }
 }
 
-#[delete("/delete")]
+#[delete("/Songs")]
 async fn delete_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -> impl Responder {
     let action = app_data.service_manager.api.delete_song(&data.name);
     let result = web::block(move || action).await;
