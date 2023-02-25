@@ -3,6 +3,7 @@ use bson::{doc, Document};
 use mongodb::results::{DeleteResult, UpdateResult, InsertOneResult};
 use mongodb::{error::Error, Collection};
 use serde::{Deserialize, Serialize};
+use serde_json::to_string;
 // External constructors
 extern crate serde;
 extern crate serde_json;
@@ -14,7 +15,12 @@ pub struct Data {
     genre: String,
     length: String,
     artist: String,
+    image: String,
+    music: String
 }
+
+pub static mut LIST_SONGS: Vec<Data> = Vec::new();
+
 
 // Reference colection clone
 #[derive(Clone)]
@@ -28,13 +34,17 @@ fn data_to_document(data: &Data) -> Document {
         name,
         genre,
         length,
-        artist
+        artist,
+        image,
+        music
     } = data;
     doc! {
         "name": name,
         "genre": genre,
         "length": length,
-        "artist": artist
+        "artist": artist,
+        "image": image,
+        "music": music
     }
 }
 
@@ -43,6 +53,28 @@ impl ApiService {
     
     pub fn new(collection: Collection) -> ApiService {
         ApiService { collection }
+    }
+
+    // Insert data to List
+    pub fn create_song_to_list(&self, _data:&Data) -> Result<bool, Error> {
+
+        let copy = Data {
+            name: _data.name.to_string(),
+            genre: _data.genre.to_string(),
+            length:_data.length.to_string(),
+            artist: _data.artist.to_string(),
+            image: _data.image.to_string(),
+            music: _data.music.to_string()
+        };
+        
+        unsafe{LIST_SONGS.push(copy)}
+
+        Ok( true )       
+    }
+    
+    pub fn get_data_list_json() -> Result<String, serde_json::Error> {
+        let data_list = unsafe { &LIST_SONGS };
+        to_string(data_list)
     }
 
     // Insert data to Mongo DB

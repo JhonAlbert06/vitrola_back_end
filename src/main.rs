@@ -15,6 +15,7 @@ pub struct ServiceManager {
     api: ApiService,
 }
 
+
 // Api Servie Implementation
 impl ServiceManager {
     pub fn new(api: ApiService) -> Self {
@@ -26,6 +27,7 @@ impl ServiceManager {
 pub struct AppState {
     service_manager: ServiceManager,
 }
+
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -48,7 +50,7 @@ async fn main() -> std::io::Result<()> {
     let db = client.database(&database_name);
 
     // get the reference to the Collection
-    let user_collection_name = env::var("USER_COLLECTION_NAME").expect("COLLECTION NAME is not in .env file");
+    let user_collection_name = env::var("USER_COLLECTION_SONGS").expect("COLLECTION NAME is not in .env file");
     let user_collection = db.collection(&user_collection_name);
 
     // Gte the server URL
@@ -56,6 +58,7 @@ async fn main() -> std::io::Result<()> {
 
     // Start the server
     HttpServer::new(move || {
+
         let user_service_worker = ApiService::new(user_collection.clone());
         let service_manager = ServiceManager::new(user_service_worker);
 
