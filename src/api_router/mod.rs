@@ -1,5 +1,6 @@
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
 
+
 use crate::api_service::Data;
 
 #[get("/Songs")]
@@ -70,8 +71,7 @@ async fn delete_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>
 
 
 //------------------------------------------------------------------------------------------------------------------
-
-
+ 
 #[get("/Songs/List")]
 async fn get_all_songs_list(app_data: web::Data<crate::AppState1>) -> impl Responder {
     let action = app_data.service_manager1.api.get_all_songs_list();
@@ -98,6 +98,7 @@ async fn add_song_list(app_data: web::Data<crate::AppState1>, data: web::Json<Da
     }
 }
 
+
 #[delete("/Songs/List")]
 async fn delete_song_list(app_data: web::Data<crate::AppState1>, data: web::Json<Data>) -> impl Responder {
     let action = app_data.service_manager1.api.delete_song_list(&data.name);
@@ -115,12 +116,12 @@ async fn delete_song_list(app_data: web::Data<crate::AppState1>, data: web::Json
 
 // function that will be called on new Application to configure routes for this module
 pub fn init(cfg: &mut web::ServiceConfig) {
+    cfg.service(get_all_songs_list);
+    cfg.service(add_song_list);
+    cfg.service(delete_song_list);
     cfg.service(get_song_by);
     cfg.service(add_song);
     cfg.service(update_song);
     cfg.service(delete_song);
     cfg.service(get_all_songs);
-    cfg.service(get_all_songs_list);
-    cfg.service(add_song_list);
-    cfg.service(delete_song_list);
 }
