@@ -14,8 +14,8 @@ pub struct Data {
     genre: String,
     length: String,
     artist: String,
-    image: String,
-    music: String
+    /* image: String,
+    music: String */
 }
 
 // Reference colection clone
@@ -36,16 +36,16 @@ fn data_to_document(data: &Data) -> Document {
         genre,
         length,
         artist,
-        image,
-        music
+        /* image,
+        music */
     } = data;
     doc! {
         "name": name,
         "genre": genre,
         "length": length,
         "artist": artist,
-        "image": image,
-        "music": music
+        /* "image": image,
+        "music": music */
     }
 }
 
