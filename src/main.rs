@@ -46,6 +46,7 @@ pub struct AppStatePlayList {
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    
     // init env
     dotenv().ok();
 
