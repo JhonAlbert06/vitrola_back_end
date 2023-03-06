@@ -20,12 +20,12 @@ pub struct Data {
 
 // Reference colection clone
 #[derive(Clone)]
-pub struct ApiService {
+pub struct ApiServiceSong {
     collection: Collection,
 }
 
 #[derive(Clone)]
-pub struct ApiService1 {
+pub struct ApiServicePlayList {
     collection1: Collection,
 }
 
@@ -50,10 +50,10 @@ fn data_to_document(data: &Data) -> Document {
 }
 
 // Functions with quieries to Mongo
-impl ApiService {
+impl ApiServiceSong {
     
-    pub fn new(collection: Collection) -> ApiService {
-        ApiService { collection }
+    pub fn new(collection: Collection) -> ApiServiceSong {
+        ApiServiceSong { collection }
     }
 
     // Insert data to Mongo DB
@@ -89,10 +89,10 @@ impl ApiService {
 }
 
 // Functions with quieries to Mongo
-impl ApiService1 {
+impl ApiServicePlayList {
     
-    pub fn new(collection1: Collection) -> ApiService1 {
-        ApiService1 { collection1 }
+    pub fn new(collection1: Collection) -> ApiServicePlayList {
+        ApiServicePlayList { collection1 }
     }
 
     // Insert data to Mongo DB

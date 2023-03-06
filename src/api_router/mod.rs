@@ -1,11 +1,10 @@
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
 
-
 use crate::api_service::Data;
 
 #[get("/Songs")]
-async fn get_all_songs(app_data: web::Data<crate::AppState>) -> impl Responder {
-    let action = app_data.service_manager.api.get_all_songs();
+async fn get_all_songs(app_data: web::Data<crate::AppStateSong>) -> impl Responder {
+    let action = app_data.service_manager_song.api.get_all_songs();
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result),
@@ -17,8 +16,8 @@ async fn get_all_songs(app_data: web::Data<crate::AppState>) -> impl Responder {
 }
 
 #[get("/Songs/{param}")]
-async fn get_song_by(app_data: web::Data<crate::AppState>, param: web::Path<String>) -> impl Responder {
-    let action = app_data.service_manager.api.get_by_song(&param);
+async fn get_song_by(app_data: web::Data<crate::AppStateSong>, param: web::Path<String>) -> impl Responder {
+    let action = app_data.service_manager_song.api.get_by_song(&param);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result),
@@ -30,8 +29,8 @@ async fn get_song_by(app_data: web::Data<crate::AppState>, param: web::Path<Stri
 }
 
 #[post("/Songs")]
-async fn add_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager.api.create_song(&data);
+async fn add_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data>) -> impl Responder {
+    let action = app_data.service_manager_song.api.create_song(&data);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.inserted_id),
@@ -44,8 +43,8 @@ async fn add_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -
 
 
 #[post("/Songs/{param}")]
-async fn update_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>, param: web::Path<String>) -> impl Responder {
-    let action = app_data.service_manager.api.update_song(&data, &param);
+async fn update_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data>, param: web::Path<String>) -> impl Responder {
+    let action = app_data.service_manager_song.api.update_song(&data, &param);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.modified_count),
@@ -57,8 +56,8 @@ async fn update_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>
 }
 
 #[delete("/Songs")]
-async fn delete_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager.api.delete_song(&data.name);
+async fn delete_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data>) -> impl Responder {
+    let action = app_data.service_manager_song.api.delete_song(&data.name);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.deleted_count),
@@ -73,8 +72,8 @@ async fn delete_song(app_data: web::Data<crate::AppState>, data: web::Json<Data>
 //------------------------------------------------------------------------------------------------------------------
  
 #[get("/Songs/List")]
-async fn get_all_songs_list(app_data: web::Data<crate::AppState1>) -> impl Responder {
-    let action = app_data.service_manager1.api.get_all_songs_list();
+async fn get_all_songs_list(app_data: web::Data<crate::AppStatePlayList>) -> impl Responder {
+    let action = app_data.service_manager_play_list.api.get_all_songs_list();
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result),
@@ -86,8 +85,8 @@ async fn get_all_songs_list(app_data: web::Data<crate::AppState1>) -> impl Respo
 }
 
 #[post("/Songs/List")]
-async fn add_song_list(app_data: web::Data<crate::AppState1>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager1.api.create_song_list(&data);
+async fn add_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::Json<Data>) -> impl Responder {
+    let action = app_data.service_manager_play_list.api.create_song_list(&data);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.inserted_id),
@@ -100,8 +99,8 @@ async fn add_song_list(app_data: web::Data<crate::AppState1>, data: web::Json<Da
 
 
 #[delete("/Songs/List")]
-async fn delete_song_list(app_data: web::Data<crate::AppState1>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager1.api.delete_song_list(&data.name);
+async fn delete_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::Json<Data>) -> impl Responder {
+    let action = app_data.service_manager_play_list.api.delete_song_list(&data.name);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.deleted_count),

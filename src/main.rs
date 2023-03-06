@@ -4,48 +4,49 @@ use actix_web::{http, middleware, App, HttpServer};
 use dotenv::dotenv;
 use mongodb::{options::ClientOptions, Client};
 use std::env;
-use api_service::{ApiService, ApiService1};
+use api_service::{ApiServiceSong, ApiServicePlayList};
 
 // External modules reference
 mod api_router;
 mod api_service;
 
 // Api Service constructor
-pub struct ServiceManager {
-    api: ApiService,
+pub struct ServiceManagerSong {
+    api: ApiServiceSong,
 }
 
-pub struct ServiceManager1 {
-    api: ApiService1,
+pub struct ServiceManagerPlayList {
+    api: ApiServicePlayList,
 }
 
 
 // Api Servie Implementation
-impl ServiceManager {
-    pub fn new(api: ApiService) -> Self {
-        ServiceManager { api }
+impl ServiceManagerSong {
+    pub fn new(api: ApiServiceSong) -> Self {
+        ServiceManagerSong { api }
     }
 }
 
-impl ServiceManager1 {
-    pub fn new(api: ApiService1) -> Self {
-        ServiceManager1 { api }
+impl ServiceManagerPlayList {
+    pub fn new(api: ApiServicePlayList) -> Self {
+        ServiceManagerPlayList { api }
     }
 }
 
 
 // Service Manager constructor
-pub struct AppState {
-    service_manager: ServiceManager,
+pub struct AppStateSong {
+    service_manager_song: ServiceManagerSong,
 }
 
-pub struct AppState1 {
-    service_manager1: ServiceManager1,
+pub struct AppStatePlayList {
+    service_manager_play_list: ServiceManagerPlayList,
 }
 
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    
     // init env
     dotenv().ok();
 
@@ -66,10 +67,10 @@ async fn main() -> std::io::Result<()> {
 
     // get the reference to the Collection
     let collection_name = env::var("USER_COLLECTION_SONGS").expect("COLLECTION NAME is not in .env file");
-    let collection = db.collection(&collection_name);
+    let collection_song = db.collection(&collection_name);
 
     let collection_name1 = env::var("USER_COLLECTION_PLAYLIST").expect("COLLECTION NAME is not in .env file");
-    let collection1 = db.collection(&collection_name1);
+    let collection_play_list = db.collection(&collection_name1);
 
     // Gte the server URL
     let server_url = env::var("SERVER_URL").expect("SERVER URL is not in .env file");
@@ -77,11 +78,11 @@ async fn main() -> std::io::Result<()> {
     // Start the server
     HttpServer::new(move || {
 
-        let user_service_worker = ApiService::new(collection.clone());
-        let service_manager = ServiceManager::new(user_service_worker);
+        let service_worker_song = ApiServiceSong::new(collection_song.clone());
+        let service_manager_song = ServiceManagerSong::new(service_worker_song);
 
-        let user_service_worker1 = ApiService1::new(collection1.clone());
-        let service_manager1 = ServiceManager1::new(user_service_worker1);
+        let service_worker_play_list = ApiServicePlayList::new(collection_play_list.clone());
+        let service_manager_play_list = ServiceManagerPlayList::new(service_worker_play_list);
 
         // cors
         let cors_middleware = Cors::new()
@@ -95,8 +96,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors_middleware)
             .wrap(middleware::Logger::default())
-            .data(AppState { service_manager })
-            .data(AppState1 { service_manager1 })
+            .data(AppStateSong { service_manager_song })
+            .data(AppStatePlayList { service_manager_play_list })
             .configure(api_router::init)
     })
     .bind(server_url)?
