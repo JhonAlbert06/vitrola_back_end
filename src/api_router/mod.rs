@@ -57,7 +57,7 @@ async fn update_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<D
 
 #[delete("/Songs")]
 async fn delete_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager_song.api.delete_song(&data.name);
+    let action = app_data.service_manager_song.api.delete_song(&data._id);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.deleted_count),
@@ -100,7 +100,7 @@ async fn add_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::
 
 #[delete("/Songs/List")]
 async fn delete_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::Json<Data>) -> impl Responder {
-    let action = app_data.service_manager_play_list.api.delete_song_list(&data.name);
+    let action = app_data.service_manager_play_list.api.delete_song_list(&data._id);
     let result = web::block(move || action).await;
     match result {
         Ok(result) => HttpResponse::Ok().json(result.deleted_count),
