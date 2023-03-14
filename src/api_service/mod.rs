@@ -1,5 +1,7 @@
+
+use bson::oid::ObjectId;
 // External imports
-use bson::{doc, Document};
+use bson::{doc, Document, Bson};
 use mongodb::results::{DeleteResult, UpdateResult, InsertOneResult};
 use mongodb::{error::Error, Collection};
 use serde::{Deserialize, Serialize};
@@ -10,13 +12,25 @@ extern crate serde_json;
 // Estructure data for DB
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Data {
+    pub _id:  Option<Id>,
     pub name: String,
     genre: String,
     length: String,
     artist: String,
-    /* image: String,
-    music: String */
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Id {
+    #[serde(rename = "$oid")]
+    pub oid: String,
+}
+
+impl From<Id> for Bson {
+    fn from(id: Id) -> Bson {
+        Bson::ObjectId(ObjectId::with_string(&id.oid).unwrap())
+    }
+}
+
 
 // Reference colection clone
 #[derive(Clone)]
@@ -36,16 +50,23 @@ fn data_to_document(data: &Data) -> Document {
         genre,
         length,
         artist,
-        /* image,
-        music */
+        _id,
     } = data;
-    doc! {
-        "name": name,
-        "genre": genre,
-        "length": length,
-        "artist": artist,
-        /* "image": image,
-        "music": music */
+
+    match _id {
+        Some(id) => doc! {
+            "name": name,
+            "genre": genre,
+            "length": length,
+            "artist": artist,
+            "_id": id.clone(),
+        },
+        None => doc! {
+            "name": name,
+            "genre": genre,
+            "length": length,
+            "artist": artist,
+        }
     }
 }
 
@@ -68,9 +89,11 @@ impl ApiServiceSong {
     }
 
     // Delete some document
-    pub fn delete_song(&self, _title: &String) -> Result<DeleteResult, Error> {
-        self.collection.delete_one(doc! { "name": _title }, None)
+    pub fn delete_song(&self, _id: &Option<Id>) -> Result<DeleteResult, Error> {
+        let id_bson = _id.as_ref().map(|id| id.clone().into()).unwrap_or(Bson::Null);
+        self.collection.delete_one(doc! { "_id": id_bson }, None)
     }
+    
 
     // Get all documents
     pub fn get_all_songs(&self) -> std::result::Result<std::vec::Vec<bson::ordered::OrderedDocument>, mongodb::error::Error> {
@@ -100,10 +123,12 @@ impl ApiServicePlayList {
         self.collection1.insert_one(data_to_document(_data), None)
     }
 
-    // Delete some document
-    pub fn delete_song_list(&self, _title: &String) -> Result<DeleteResult, Error> {
-        self.collection1.delete_one(doc! { "name": _title }, None)
+
+    pub fn delete_song_list(&self, _id: &Option<Id>) -> Result<DeleteResult, Error> {
+        let id_bson = _id.as_ref().map(|id| id.clone().into()).unwrap_or(Bson::Null);
+        self.collection1.delete_one(doc! { "_id": id_bson }, None)
     }
+    
 
     // Get all documents
     pub fn get_all_songs_list(&self) -> std::result::Result<std::vec::Vec<bson::ordered::OrderedDocument>, mongodb::error::Error> {
