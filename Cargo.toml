@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 mongodb = "0.9.2"
 actix-web = "2"
+actix-files = "0.2.2"
 actix-rt = "1"
 bson = "0.14.0"
 serde = "1.0.103"
