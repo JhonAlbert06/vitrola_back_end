@@ -5,6 +5,7 @@ use dotenv::dotenv;
 use mongodb::{options::ClientOptions, Client};
 use std::env;
 use api_service::{ApiServiceSong, ApiServicePlayList};
+use actix_files as fs;
 
 // External modules reference
 mod api_router;
@@ -98,6 +99,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .data(AppStateSong { service_manager_song })
             .data(AppStatePlayList { service_manager_play_list })
+            .service(fs::Files::new("/public", "./public").show_files_listing())
             .configure(api_router::init)
     })
     .bind(server_url)?
