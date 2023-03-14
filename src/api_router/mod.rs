@@ -41,7 +41,6 @@ async fn add_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data
     }
 }
 
-
 #[post("/Songs/{param}")]
 async fn update_song(app_data: web::Data<crate::AppStateSong>, data: web::Json<Data>, param: web::Path<String>) -> impl Responder {
     let action = app_data.service_manager_song.api.update_song(&data, &param);
@@ -96,7 +95,6 @@ async fn add_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::
         }
     }
 }
-
 
 #[delete("/Songs/List")]
 async fn delete_song_list(app_data: web::Data<crate::AppStatePlayList>, data: web::Json<Data>) -> impl Responder {
