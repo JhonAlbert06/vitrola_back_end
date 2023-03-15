@@ -1,6 +1,4 @@
-# vitrola_back_end
-
-Back-End --- Rust (Server)
+# Back-End --- Rust (Server)
 
 This is a Personal Project i make a "jukebox", I used four different programming languages
 
