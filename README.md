@@ -14,11 +14,11 @@ Front-End --- javascript (ReactJS) (Player)
 
 	https://github.com/JhonAlbert06/vitrola_player.git
 ----------------------------------------------------------------------
-Desktop --- Dart (Flutter) (Clien)
+Desktop --- Dart (Flutter) (Client)
 
 	https://github.com/JhonAlbert06/vitrola_desktop.git
 ----------------------------------------------------------------------
-Movil --- Kotlin (jetpack compose) (Clien)
+Movil --- Kotlin (jetpack compose) (Client)
 
 	https://github.com/JhonAlbert06/vitrola_movil.git
 ----------------------------------------------------------------------
